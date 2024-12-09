@@ -12,7 +12,7 @@ body {
     color: #333;
     line-height: 1.6;
     font-size: 16px;
-    padding: 20px;
+    padding: 0px;
 }
 
 /* Header */
@@ -64,6 +64,10 @@ header.top-menu ul
     padding: 0;
     overflow: hidden;
     background-color: #333;
+}
+/* Main container*/
+main {
+    margin: 1rem;
 }
 /* div container */
 .container {
@@ -192,4 +196,38 @@ table tr:nth-child(even) {
     margin-top: 3rem;
     width: 100%;
     max-width: 60rem;
+}
+/* Styles pour la grille */
+.grid-row {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.grid-cell {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    margin-right: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles pour les définitions */
+#definitions-container {
+    margin-top: 20px;
+}
+
+#definitions-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#definitions-container input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }

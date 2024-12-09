@@ -3,58 +3,73 @@ namespace App\Models;
 
 use App\Models\Database;
 use PDO;
+use PDOException;
 
-class Cell {
-    private int $id;
-    private int $grid_id;
-    private int $ligne;
-    private int $colonne;
-    private ?string $value; // `value` peut être NULL si la cellule est vide
-
-    // Constructeur
-    public function __construct(int $grid_id, int $ligne, int $colonne, ?string $value = null) {
-        $this->grid_id = $grid_id;
-        $this->ligne = $ligne;
-        $this->colonne = $colonne;
-        $this->value = $value;
+class Cell
+{
+    /**
+     * Ajoute une cellule à la grille.
+     *
+     * @param int $gridId ID de la grille.
+     * @param int $ligne Numéro de la ligne.
+     * @param int $colonne Numéro de la colonne.
+     * @param string|null $value Valeur de la cellule (lettre ou NULL).
+     * @return bool True si ajouté avec succès, False sinon.
+     */
+    public static function add(int $gridId, int $ligne, int $colonne, ?string $value): bool
+    {
+        try {
+            $pdo = Database::getConnection();
+            $sql = "INSERT INTO cells (grid_id, ligne, colonne, value) VALUES (:grid_id, :ligne, :colonne, :value)";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([
+                ':grid_id' => $gridId,
+                ':ligne' => $ligne,
+                ':colonne' => $colonne,
+                ':value' => $value,
+            ]);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'ajout de la cellule : " . $e->getMessage());
+            return false;
+        }
     }
 
-    // Méthodes CRUD
-
-    // Création d'une cellule
-    public function save(): bool {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("INSERT INTO cells (grid_id, ligne, colonne, value) VALUES (:grid_id, :ligne, :colonne, :value)");
-        return $stmt->execute([
-            ':grid_id' => $this->grid_id,
-            ':ligne' => $this->ligne,
-            ':colonne' => $this->colonne,
-            ':value' => $this->value,
-        ]);
+    /**
+     * Récupère toutes les cellules associées à une grille.
+     *
+     * @param int $gridId ID de la grille.
+     * @return array Liste des cellules.
+     */
+    public static function getByGridId(int $gridId): array
+    {
+        try {
+            $pdo = Database::getConnection();
+            $sql = "SELECT * FROM cells WHERE grid_id = :grid_id ORDER BY ligne, colonne";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':grid_id' => $gridId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la récupération des cellules : " . $e->getMessage());
+            return [];
+        }
     }
 
-    // Lecture des cellules par grille
-    public static function getByGridId(int $grid_id): array {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("SELECT * FROM cells WHERE grid_id = :grid_id ORDER BY ligne, colonne");
-        $stmt->execute([':grid_id' => $grid_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Mise à jour d'une cellule
-    public static function update(int $id, ?string $value): bool {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("UPDATE cells SET value = :value WHERE id = :id");
-        return $stmt->execute([
-            ':value' => $value,
-            ':id' => $id,
-        ]);
-    }
-
-    // Suppression des cellules d'une grille
-    public static function deleteByGridId(int $grid_id): bool {
-        $db = Database::getConnection();
-        $stmt = $db->prepare("DELETE FROM cells WHERE grid_id = :grid_id");
-        return $stmt->execute([':grid_id' => $grid_id]);
+    /**
+     * Supprime toutes les cellules associées à une grille.
+     *
+     * @param int $gridId ID de la grille.
+     * @return bool True si supprimées avec succès, False sinon.
+     */
+    public static function deleteByGridId(int $gridId): bool
+    {
+        try {
+            $pdo = Database::getConnection();
+            $sql = "DELETE FROM cells WHERE grid_id = :grid_id";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([':grid_id' => $gridId]);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la suppression des cellules : " . $e->getMessage());
+            return false;
+        }
     }
 }
