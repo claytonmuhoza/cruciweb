@@ -8,6 +8,7 @@
 </head>
 <body>
     <header class="top-menu">
+        <h1>Cruciweb</h1>
         <nav>
             <ul>
                 <li><a href="/">Accueil</a></li>
@@ -16,8 +17,8 @@
                     <li><a href="/grilles/creation">Créer une grille</a></li>
                     <li><a href="/deconnexion">Déconnexion</a></li>
                 <?php else: ?>
-                    <li><a href="/connexion">Connexion</a></li>
-                    <li><a href="/inscription">Inscription</a></li>
+                    <li><a class="menu-btn-connexion" href="/connexion">Connexion</a></li>
+                    <li><a class="menu-btn-inscription" href="/inscription">Inscription</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
@@ -25,8 +26,8 @@
     <main>
         <?= $content ?? '' ?>
     </main>
-    <footer>
+    <!-- <footer>
         <p>&copy; <?= date('Y') ?> Plateforme de Mots Croisés</p>
-    </footer>
+    </footer> -->
 </body>
 </html>

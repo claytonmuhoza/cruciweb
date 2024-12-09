@@ -17,16 +17,30 @@ body {
 
 /* Header */
 header.top-menu {
+    display: flex;
     background-color: #333;
     color: #fff;
     padding: 10px 20px;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 header.top-menu h1 {
     margin: 0;
     font-size: 1.8rem;
 }
-
+header.top-menu .menu-btn-connexion {
+    display: flex;
+    align-items: center;
+    background: #0056b3;
+    padding: 0.5rem 1rem;
+}
+header.top-menu .menu-btn-inscription {
+    display: flex;
+    align-items: center;
+    background: #00b351;
+    padding: 0.5rem 1rem;
+}
 header.top-menu nav {
     margin-top: 10px;
 }
@@ -40,9 +54,11 @@ header.top-menu nav a {
 header.top-menu nav a:hover {
     text-decoration: underline;
 }
-.header.top-menu ul
+header.top-menu ul
 {
     list-style-type: none;
+    display: flex;
+    align-items: center;
     margin: 0;
     padding: 0;
     overflow: hidden;
