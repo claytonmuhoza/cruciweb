@@ -1,8 +1,7 @@
 <?php
 namespace App\Config;
 require_once __DIR__ . '/../Autoloader.php';
-// use App\Controllers\UserController;
-use App\Controllers\GrilleController;
+
 use App\Controllers\UtilisateurController;
 use App\Controllers\ErrorPageController;
 use App\Controllers\GridController;
@@ -11,7 +10,7 @@ $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 if ($requestUri === '/' && $requestMethod === 'GET') {
-    (new GrilleController())->index();
+    (new GridController())->index();
 } elseif ($requestUri === '/connexion') {
     (new UtilisateurController())->connexion();
 }elseif ($requestUri === '/inscription') {
@@ -19,10 +18,10 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
 }elseif ($requestUri === '/grilles/creation' && $requestMethod === 'GET') {
     (new GridController())->create();
 } 
-elseif ($requestUri === '/grilles/creation' && $requestMethod === 'POST') {
+elseif ($requestUri === '/grilles/store' && $requestMethod === 'POST') {
     (new GridController())->store();
 } elseif ($requestUri === '/grilles' && $requestMethod === 'GET') {
-    (new GrilleController())->liste();
+    (new GridController())->index();
 } else if ($requestUri==='/deconnexion'){
     (new UtilisateurController())->deconnexion();
 }else {

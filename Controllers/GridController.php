@@ -79,10 +79,10 @@ class GridController extends BaseController
                 'type' => 'success',
                 'text' => 'La grille a été créée avec succès.',
             ];
-            $this->redirect('/grids');
+            $this->redirect('/grilles');
         } else {
             // Si la méthode n'est pas POST, rediriger vers le formulaire de création
-            $this->redirect('/grids/create');
+            $this->redirect('/grilles/create');
         }
     }
 

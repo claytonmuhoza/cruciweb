@@ -9,7 +9,7 @@
     </div>
 <?php endif; ?>
 
-<form id="grid-form" action="/grids/store" method="POST">
+<form id="grid-form" action="/grilles/store" method="POST">
     <label for="name">Nom de la grille :</label>
     <input type="text" id="name" name="name" required>
 
