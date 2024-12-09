@@ -1,7 +1,7 @@
-<?php $title = "Liste des grilles"; ?>
+<?php $title = "Erreur 404"; ?>
 <?php ob_start(); ?>
-
-    <section>
+    
+    <section class="container"> 
         <h1>Page introuvable</h1>
         <p>La page que vous cherchez n'existe pas.</p>
     </section>

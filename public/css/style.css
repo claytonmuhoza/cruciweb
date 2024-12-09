@@ -18,6 +18,7 @@ body {
 /* Header */
 header.top-menu {
     display: flex;
+    flex-wrap: wrap;
     background-color: #333;
     color: #fff;
     padding: 10px 20px;
@@ -64,8 +65,8 @@ header.top-menu ul
     overflow: hidden;
     background-color: #333;
 }
-/* Main content */
-main {
+/* div container */
+.container {
     margin: 20px 0;
     padding: 20px;
     background-color: #fff;
@@ -84,6 +85,7 @@ footer {
     width: 100%;
     margin-top: 20px;
 }
+
 
 /* Buttons */
 button {
@@ -172,4 +174,22 @@ table tr:nth-child(even) {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+.flex-center
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.connexion-container
+{
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 60rem;
+}
+.inscription-container
+{
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 60rem;
 }
