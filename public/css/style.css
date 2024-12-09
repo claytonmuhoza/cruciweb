@@ -16,31 +16,38 @@ body {
 }
 
 /* Header */
-header {
+header.top-menu {
     background-color: #333;
     color: #fff;
     padding: 10px 20px;
 }
 
-header h1 {
+header.top-menu h1 {
     margin: 0;
     font-size: 1.8rem;
 }
 
-header nav {
+header.top-menu nav {
     margin-top: 10px;
 }
 
-header nav a {
+header.top-menu nav a {
     color: #fff;
     text-decoration: none;
     margin-right: 15px;
 }
 
-header nav a:hover {
+header.top-menu nav a:hover {
     text-decoration: underline;
 }
-
+.header.top-menu ul
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
 /* Main content */
 main {
     margin: 20px 0;
