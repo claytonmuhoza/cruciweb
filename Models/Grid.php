@@ -129,6 +129,17 @@ class Grid
             $stmt->execute([':id' => $id]);
             $grid = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            if ($grid) {
+                // Récupérer le nombre de lignes et de colonnes
+                $sql = "SELECT MAX(ligne) as max_ligne, MAX(colonne) as max_colonne FROM cells WHERE grid_id = :grid_id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([':grid_id' => $id]);
+                $dimensions = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $grid['num_rows'] = $dimensions['max_ligne'] ?? 0;
+                $grid['num_columns'] = $dimensions['max_colonne'] ?? 0;
+            }
+
             return $grid ?: null;
         } catch (PDOException $e) {
             // Log l'erreur pour le débogage
@@ -168,7 +179,19 @@ class Grid
             $pdo = Database::getConnection();
             $sql = "SELECT * FROM grids ORDER BY created_at DESC";
             $stmt = $pdo->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $grids = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($grids as &$grid) {
+                $sql = "SELECT MAX(ligne) as max_ligne, MAX(colonne) as max_colonne FROM cells WHERE grid_id = :grid_id";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([':grid_id' => $grid['id']]);
+                $dimensions = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $grid['num_rows'] = $dimensions['max_ligne'] ?? 0;
+                $grid['num_columns'] = $dimensions['max_colonne'] ?? 0;
+            }
+
+            return $grids;
         } catch (PDOException $e) {
             // Log l'erreur pour le débogage
             error_log("Erreur lors de la récupération de toutes les grilles : " . $e->getMessage());

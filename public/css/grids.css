@@ -28,6 +28,7 @@ h1 {
 }
 
 .card {
+    margin-top: 1rem;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;

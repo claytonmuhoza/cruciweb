@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\Grid;
 use App\Models\Definition;
 use App\Models\Cell;
+use App\Models\Sauvegarde;
 
 class GridController extends BaseController
 {
@@ -93,6 +94,14 @@ class GridController extends BaseController
     {
         $grids = Grid::getAll();
         $this->render('grids/liste', [
+            'title' => 'Accueil- CruciWeb',
+            'grids' => $grids,
+        ]);
+    }
+    public function liste()
+    {
+        $grids = Grid::getAll();
+        $this->render('grids/liste', [
             'title' => 'Liste des Grilles',
             'grids' => $grids,
         ]);
@@ -124,5 +133,51 @@ class GridController extends BaseController
         }
 
         $this->redirect('/grids');
+    }
+    public function show($gridId)
+    {
+        $grid = Grid::getById($gridId);
+        $definitions = Definition::getByGridId($gridId);
+        $cells = Cell::getByGridId($gridId);
+
+        if (!$grid) {
+            $this->render('error/404', ['title' => 'Grille introuvable']);
+            return;
+        }
+
+        $this->render('grids/resolve', [
+            'title' => 'Résolution de la Grille',
+            'grid' => $grid,
+            'definitions' => $definitions,
+            'cells' => $cells,
+        ]);
+    }
+
+    /**
+     * Sauvegarde l'état actuel de la grille pour un utilisateur connecté.
+     */
+    public function save()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
+            $userId = $_SESSION['user']['id'];
+            $gridId = $_POST['grid_id'] ?? null;
+            $gridState = $_POST['grid_state'] ?? null;
+
+            if (!$gridId || !$gridState) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Données invalides']);
+                return;
+            }
+
+            $sauvegarde = new Sauvegarde();
+            $success = $sauvegarde->sauvegarderGrille($userId, $gridId, $gridState);
+
+            if ($success) {
+                echo json_encode(['success' => true]);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Erreur lors de la sauvegarde']);
+            }
+        }
     }
 }

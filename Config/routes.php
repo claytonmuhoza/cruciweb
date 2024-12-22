@@ -13,18 +13,22 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
     (new GridController())->index();
 } elseif ($requestUri === '/connexion') {
     (new UtilisateurController())->connexion();
-}elseif ($requestUri === '/inscription') {
+} elseif ($requestUri === '/inscription') {
     (new UtilisateurController())->inscription();
-}elseif ($requestUri === '/grilles/creation' && $requestMethod === 'GET') {
+} elseif ($requestUri === '/grilles/creation' && $requestMethod === 'GET') {
     (new GridController())->create();
-} 
-elseif ($requestUri === '/grilles/store' && $requestMethod === 'POST') {
+} elseif ($requestUri === '/grilles/store' && $requestMethod === 'POST') {
     (new GridController())->store();
 } elseif ($requestUri === '/grilles' && $requestMethod === 'GET') {
-    (new GridController())->index();
-} else if ($requestUri==='/deconnexion'){
+    (new GridController())->liste();
+} elseif (preg_match('#^/grilles/resolve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->show($gridId); // Appelle la méthode resolve avec l'ID de la grille
+} elseif ($requestUri === '/grilles/save-progress' && $requestMethod === 'POST') {
+    (new GridController())->save(); // Sauvegarde la progression
+} elseif ($requestUri === '/deconnexion') {
     (new UtilisateurController())->deconnexion();
-}else {
+} else {
     http_response_code(404);
     (new ErrorPageController())->error404();
 }
