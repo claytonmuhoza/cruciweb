@@ -263,23 +263,23 @@ table tr:nth-child(even) {
 
 .cards-container-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(31.25rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
     gap: 1.25rem;
 }
 
 .bg-success
 {
-    border: none;
+   
     padding: 0.2rem 1.5rem ;
     font-size: 1rem;
     border-radius: 2rem;
     text-decoration: none;
     background-color: #d4edda;
     color: #155724;
+    border: 1px solid #c3e6cb;
 }
 .bg-danger
 {
-    border: none;
     padding: 0.2rem 1.5rem ;
     font-size: 1rem;
     border-radius: 2rem;
@@ -290,7 +290,6 @@ table tr:nth-child(even) {
 }
 .bg-warning
 {
-    border: none;
     padding: 0.2rem 1.5rem ;
     font-size: 1rem;
     border-radius: 2rem;
@@ -298,4 +297,20 @@ table tr:nth-child(even) {
     background-color: #fff3cd;
     color: #856404;
     border: 1px solid #ffeeba;
+}
+.create-grid-page
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.create-grid-page h1
+{
+    margin-bottom: 2rem;
+}
+.create-grid-page form
+{
+    width: 100%;
+    max-width: 40rem;
 }

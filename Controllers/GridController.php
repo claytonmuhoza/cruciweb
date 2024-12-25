@@ -34,6 +34,7 @@ class GridController extends BaseController
             if (empty($name) || $rows <= 0 || $columns <= 0) {
                 $this->render('grids/create', [
                     'title' => 'Créer une Grille',
+                    'page_creergrille' => true,
                     'error' => 'Veuillez remplir tous les champs requis.',
                 ]);
                 return;

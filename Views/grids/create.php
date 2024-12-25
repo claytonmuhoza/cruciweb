@@ -10,7 +10,8 @@
 <?php endif; ?>
 
 <form id="grid-form" action="/grilles/store" method="POST">
-    <label for="name">Nom de la grille :</label>
+    <div>
+        <label for="name">Nom de la grille :</label>
     <input type="text" id="name" name="name" required>
 
     <label for="difficulty">Difficulté :</label>
@@ -27,6 +28,8 @@
     <input type="number" id="columns" name="columns" min="1" required>
 
     <button type="button" id="generate-grid">Générer la grille</button>
+    </div>
+    
 
     <div id="grid-editor" style="display: none; margin-top: 20px;">
         <h3>Complétez la grille</h3>
