@@ -21,14 +21,32 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
     (new GridController())->store();
 } elseif ($requestUri === '/grilles' && $requestMethod === 'GET') {
     (new GridController())->liste();
+// } elseif (preg_match('#^/grilles/resolve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+//     $gridId = $matches[1];
+//     (new GridController())->show($gridId); // Appelle la méthode resolve avec l'ID de la grille
 } elseif (preg_match('#^/grilles/resolve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     $gridId = $matches[1];
-    (new GridController())->show($gridId); // Appelle la méthode resolve avec l'ID de la grille
-} elseif ($requestUri === '/grilles/save-progress' && $requestMethod === 'POST') {
+    (new GridController())->showTwo($gridId); // Appelle la méthode resolve avec l'ID de la grille
+}elseif ($requestUri === '/grilles/save-progress' && $requestMethod === 'POST') {
     (new GridController())->save(); // Sauvegarde la progression
+}elseif ($requestUri === '/api/grids' && $requestMethod === 'GET') {
+    (new GridController())->getAllGridsJson();
+} elseif (preg_match('#^/api/grids/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->getGridJson($gridId);
+} elseif (preg_match('#^/api/grids/(\d+)/definitions$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->getDefinitionsJson($gridId);
+} elseif (preg_match('#^/api/grids/(\d+)/cells$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->getCellsJson($gridId);
+}elseif (preg_match('#^/api/grids/verification/(\d+)$#', $requestUri, $matches) && $requestMethod === 'POST') {
+    $gridId = $matches[1];
+    (new GridController())->verificationCellsJSON($gridId);
 } elseif ($requestUri === '/deconnexion') {
     (new UtilisateurController())->deconnexion();
 } else {
     http_response_code(404);
     (new ErrorPageController())->error404();
 }
+

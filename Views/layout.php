@@ -14,6 +14,7 @@
                 <li><a href="/">Accueil</a></li>
                 <li><a href="/grilles">Grilles</a></li>
                 <?php if (isset($_SESSION['user'])): ?>
+                    <li><a href="/grilles/sauvegarde">Mes grilles sauvegardées</a></li>
                     <li><a class="menu-btn-connexion" href="/grilles/creation">Créer une grille</a></li>
                     <li><a href="/deconnexion">Déconnexion</a></li>
                 <?php else: ?>

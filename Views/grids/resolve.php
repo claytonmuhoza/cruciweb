@@ -1,4 +1,5 @@
 <?= var_dump($grid) ?>
+<?= var_dump($cells)?>
 <h1>Résolution de la Grille</h1>
 <h2>Définitions</h2>
 
