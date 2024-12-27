@@ -32,7 +32,7 @@ class Utilisateur {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function supprimer($id) {
-        $sql = "DELETE FROM utilisateurs WHERE id = :id";
+        $sql = "DELETE FROM utilisateurs WHERE id = :id and role != 'admin'";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
