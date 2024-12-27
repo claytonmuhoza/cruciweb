@@ -28,7 +28,7 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
     (new GridController())->showAllSavedGrid();
 } elseif (preg_match('#^/grilles/resolve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     $gridId = $matches[1];
-    (new GridController())->showTwo($gridId); // Appelle la méthode resolve avec l'ID de la grille
+    (new GridController())->resolveGrid($gridId); // Appelle la méthode resolve avec l'ID de la grille
 }elseif ($requestUri === '/grilles/save-progress' && $requestMethod === 'POST') {
     (new GridController())->save(); // Sauvegarde la progression
 }elseif ($requestUri === '/api/grids' && $requestMethod === 'GET') {

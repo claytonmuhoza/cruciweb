@@ -174,25 +174,7 @@ class GridController extends BaseController
 
         $this->redirect('/grids');
     }
-    public function show($gridId)
-    {
-        $grid = Grid::getById($gridId);
-        $definitions = Definition::getByGridId($gridId);
-        $cells = Cell::getByGridId($gridId);
-
-        if (!$grid) {
-            $this->render('error/404', ['title' => 'Grille introuvable']);
-            return;
-        }
-
-        $this->render('grids/resolve', [
-            'title' => 'Résolution de la Grille',
-            'grid' => $grid,
-            'definitions' => $definitions,
-            'cells' => $cells,
-        ]);
-    }
-    public function showTwo($gridId)
+    public function resolveGrid($gridId)
     {
         $grid = Grid::getById($gridId);
         $definitions = Definition::getByGridId($gridId);
