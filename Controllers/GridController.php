@@ -13,6 +13,11 @@ class GridController extends BaseController
      */
     public function create()
     {
+        if($this->isAdmin())
+        {
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            return;
+        }
         $this->render('grids/create', ['title' => 'Créer une Grille']);
     }
 
@@ -135,6 +140,8 @@ class GridController extends BaseController
         $grids = Grid::getAll();
         $this->render('grids/liste', [
             'title' => 'Accueil- CruciWeb',
+            'homepage' => true,
+            'isAdmin' => $this->isAdmin(),
             'grids' => $grids,
         ]);
     }
@@ -143,6 +150,7 @@ class GridController extends BaseController
         $grids = Grid::getAll();
         $this->render('grids/liste', [
             'title' => 'Liste des Grilles',
+            'isAdmin' => $this->isAdmin(),
             'grids' => $grids,
         ]);
     }
@@ -152,30 +160,27 @@ class GridController extends BaseController
      *
      * @param int $id ID de la grille à supprimer.
      */
-    public function delete($id)
+    public function deleteGrid($id)
     {
-        // Vérifier si l'utilisateur est admin
-        if (!$this->isAdmin()) {
-            $this->redirect('/');
+        if ($this->isAdmin()) {
+            $sauvegarde = new Sauvegarde();
+            $sauvegarde->deleteByGrid($id);
+            Definition::deleteByGridId($id);
+            Cell::deleteByGridId($id);
+            Grid::delete($id);
+            $this->redirect('/admin/grilles');
+        } else {
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
             return;
         }
-
-        if (Grid::delete((int) $id)) {
-            $_SESSION['message'] = [
-                'type' => 'success',
-                'text' => 'La grille a été supprimée avec succès.',
-            ];
-        } else {
-            $_SESSION['message'] = [
-                'type' => 'error',
-                'text' => 'Erreur lors de la suppression de la grille.',
-            ];
-        }
-
-        $this->redirect('/grids');
     }
     public function resolveGrid($gridId)
     {
+        if($this->isAdmin())
+        {
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            return;
+        }
         $grid = Grid::getById($gridId);
         $definitions = Definition::getByGridId($gridId);
         $cells = Cell::getByGridId($gridId);
@@ -198,6 +203,11 @@ class GridController extends BaseController
      */
     public function save()
     {
+        if($this->isAdmin())
+        {
+            echo json_encode(['Error' => 'Vous n\'avez pas les droits de sauvegarder la grille']);
+            return;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
             $userId = $_SESSION['user']['id'];
             $gridId = $_POST['grid_id'] ?? null;

@@ -1,5 +1,7 @@
 <?php
 namespace App\Controllers;
+
+use App\Models\Sauvegarde;
 use App\Models\Utilisateur;
 class UtilisateurController extends BaseController {
     private $utilisateurModel;
@@ -10,35 +12,35 @@ class UtilisateurController extends BaseController {
 
     public function inscription() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
+            $username = $_POST['username'];
             $password = $_POST['password'];
 
-            if ($this->utilisateurModel->existe($email)) {
-                $this->render('inscription', ['error' => "L'adresse email existe déjà."]);
-            } else if ($this->utilisateurModel->inscrire($email, $password)) {
-                $this->redirect('/connexion');
+            if ($this->utilisateurModel->existe($username)) {
+                $this->render('auth/inscription', ['error' => "Le nom d'utilisateur existe déjà."]);
+            } else if ($this->utilisateurModel->inscrire($username, $password)) {
+                $this->connexion();
             } else {
-                $this->render('inscription', ['error' => "Erreur lors de l'inscription."]);
+                $this->render('auth/inscription', ['error' => "Erreur lors de l'inscription."]);
             }
         } else {
-            $this->render('inscription');
+            $this->render('auth/inscription');
         }
     }
     
     public function connexion() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
+            $username = $_POST['username'];
             $password = $_POST['password'];
 
-            $utilisateur = $this->utilisateurModel->connecter($email, $password);
+            $utilisateur = $this->utilisateurModel->connecter($username, $password);
             if ($utilisateur) {
                 $_SESSION['user'] = $utilisateur;
                 $this->redirect('/grilles');
             } else {
-                $this->render('connexion', ['error' => "Email ou mot de passe incorrect."]);
+                $this->render('auth/connexion', ['error' => "Nom d'utilisateur ou mot de passe incorrect."]);
             }
         } else {
-            $this->render('connexion');
+            $this->render('auth/connexion');
         }
     }
 
@@ -46,14 +48,32 @@ class UtilisateurController extends BaseController {
         session_destroy();
         $this->redirect('/');
     }
-
-    public function supprimerUtilisateur($id) {
+    public function deleteUser($id)
+    {
         if ($this->isAdmin()) {
-            $this->utilisateurModel->supprimer($id);
+            $sauvegarde = new Sauvegarde();
+            $sauvegarde->deleteByUser($id);
+            $utilisateur = new Utilisateur();
+            $utilisateur->supprimer($id);
             $this->redirect('/admin/utilisateurs');
         } else {
-            $this->redirect('/');
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            return;
         }
     }
+    public function showAllUser()
+    {
+        if($this->isAdmin()){
+            $utilisateur = new Utilisateur();
+            $users = $utilisateur->afficherTous();
+            $this->render('admin/utilisateurs', ['users' => $users]);
+        }else{
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            return;
+        }
+    }
+   
+
+    
 }
     

@@ -2,6 +2,11 @@
 <?php ob_start(); ?>
 <?php require __DIR__ . '../../utils.php'; ?>
     <div>
+        <?php if (isset($homepage)) : ?>
+            <section>
+                <h1>Bienvenue sur la Plateforme Cruci-web</h1>
+            </section>
+        <?php endif; ?>
         <?php if (!empty($grids)) : ?>
             <div class="cards-container-grid grid-cards">
                 <?php foreach ($grids as $grid) : ?>
@@ -13,15 +18,18 @@
                         </div>
                         <div><?= htmlspecialchars($grid['num_rows'])?> lignes | <?= htmlspecialchars($grid['num_columns'])?> colonnes</div>
                         <div class="card-footer">
-                            <a class="btn-green" href="/grilles/resolve/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-view">Résoudre</a>
-                            <!-- <a href="/grids/edit/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-edit">Modifier</a> -->
-                            <!-- <a href="/grids/delete/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-delete" onclick="return confirm('Voulez-vous vraiment supprimer cette grille ?')">Supprimer</a> -->
+                            <?php if ($this->isAdmin()) : ?>
+                                <a href="/grilles/delete/<?= htmlspecialchars($grid['id']) ?>" class="btn-red" onclick="return confirm('Voulez-vous vraiment supprimer cette grille ?')">Supprimer</a>
+                            <?php else : ?>
+                                <a class="btn-green" href="/grilles/resolve/<?= htmlspecialchars($grid['id']) ?>" >Résoudre</a>
+                            <?php endif; ?>
+                            
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php else : ?>
-            <p class="no-grids">Aucune grille disponible.</p>
+            <div class="no-grids container">Aucune grille disponible.</div>
         <?php endif; ?>
     </div>
 <?php $content = ob_get_clean(); ?>

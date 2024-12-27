@@ -21,7 +21,7 @@
                 <?php endforeach; ?>
             </div>
         <?php else : ?>
-            <p class="no-grids">Aucune grille disponible.</p>
+            <div class="no-grids container">Aucune grille disponible.</div>
         <?php endif; ?>
     </div>
 <?php $content = ob_get_clean(); ?>

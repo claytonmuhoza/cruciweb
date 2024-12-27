@@ -2,6 +2,7 @@
 namespace App\Config;
 require_once __DIR__ . '/../Autoloader.php';
 
+
 use App\Controllers\UtilisateurController;
 use App\Controllers\ErrorPageController;
 use App\Controllers\GridController;
@@ -29,6 +30,9 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
 } elseif (preg_match('#^/grilles/resolve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     $gridId = $matches[1];
     (new GridController())->resolveGrid($gridId); // Appelle la méthode resolve avec l'ID de la grille
+} elseif (preg_match('#^/grilles/delete/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->deleteGrid($gridId); // Appelle la méthode deleteGrid avec l'ID de la grille
 }elseif ($requestUri === '/grilles/save-progress' && $requestMethod === 'POST') {
     (new GridController())->save(); // Sauvegarde la progression
 }elseif ($requestUri === '/api/grids' && $requestMethod === 'GET') {
@@ -47,6 +51,13 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
 }elseif (preg_match('#^/api/grids/verification/(\d+)$#', $requestUri, $matches) && $requestMethod === 'POST') {
     $gridId = $matches[1];
     (new GridController())->verificationCellsJSON($gridId);
+}elseif ($requestUri === '/admin/utilisateurs' && $requestMethod === 'GET') {
+    (new UtilisateurController())->showAllUser(); 
+}elseif ($requestUri === '/admin/grilles' && $requestMethod === 'GET') {
+    (new GridController())->liste(); 
+}elseif (preg_match('#^/grilles/resolve/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->resolveGrid($gridId); // Appelle la méthode resolve avec l'ID de la grille
 } elseif ($requestUri === '/deconnexion') {
     (new UtilisateurController())->deconnexion();
 } else {

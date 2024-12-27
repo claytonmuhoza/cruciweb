@@ -57,15 +57,16 @@ class Sauvegarde {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function supprimerTousSauvegardeUtilisateur($utilisateur_id)
+    public function deleteByUser($utilisateur_id)
     {
         $sql = "DELETE FROM sauvegardes WHERE utilisateur_id = :utilisateur_id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':utilisateur_id' => $utilisateur_id]);
     }
-    public function supprimerSauvegarde($utilisateur_id, $grille_id) {
-        $sql = "DELETE FROM sauvegardes WHERE utilisateur_id = :utilisateur_id AND grille_id = :grille_id";
+    public function deleteByGrid($grille_id)
+    {
+        $sql = "DELETE FROM sauvegardes WHERE grille_id = :grille_id";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([':utilisateur_id' => $utilisateur_id, ':grille_id' => $grille_id]);
+        return $stmt->execute([':grille_id' => $grille_id]);
     }
 }

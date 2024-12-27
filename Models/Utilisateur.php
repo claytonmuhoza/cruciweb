@@ -8,17 +8,17 @@ class Utilisateur {
         $this->db = Database::getConnection();
     }
 
-    public function inscrire($email, $password) {
-        $sql = "INSERT INTO utilisateurs (email, password, role) VALUES (:email, :password, 'utilisateur')";
+    public function inscrire($username, $password) {
+        $sql = "INSERT INTO utilisateurs (username, password, role) VALUES (:username, :password, 'utilisateur')";
         $stmt = $this->db->prepare($sql);
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        return $stmt->execute([':email' => $email, ':password' => $hashedPassword]);
+        return $stmt->execute([':username' => $username, ':password' => $hashedPassword]);
     }
 
-    public function connecter($email, $password) {
-        $sql = "SELECT * FROM utilisateurs WHERE email = :email";
+    public function connecter($username, $password) {
+        $sql = "SELECT * FROM utilisateurs WHERE username = :username";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':email' => $email]);
+        $stmt->execute([':username' => $username]);
         $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($utilisateur && password_verify($password, $utilisateur['password'])) {
@@ -26,16 +26,20 @@ class Utilisateur {
         }
         return false;
     }
-
+    public function afficherTous() {
+        $sql = "SELECT * FROM utilisateurs";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function supprimer($id) {
         $sql = "DELETE FROM utilisateurs WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
-    public function existe($email) {
-        $sql = "SELECT COUNT(*) FROM utilisateurs WHERE email = :email";
+    public function existe($username) {
+        $sql = "SELECT COUNT(*) FROM utilisateurs WHERE username = :username";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':email' => $email]);
+        $stmt->execute([':username' => $username]);
         return $stmt->fetchColumn() > 0;
     }
 

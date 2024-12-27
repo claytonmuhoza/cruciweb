@@ -1,6 +1,6 @@
 CREATE DATABASE mots_croises;
 USE mots_croises;
-CREATE TABLE utilisateurs (id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL UNIQUE,password VARCHAR(255) NOT NULL,role ENUM('utilisateur', 'admin') DEFAULT 'utilisateur',created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE utilisateurs (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) NOT NULL UNIQUE,password VARCHAR(255) NOT NULL,role ENUM('utilisateur', 'admin') DEFAULT 'utilisateur',created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE grids (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,3 +35,4 @@ CREATE TABLE sauvegardes (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (utilisateur_id, grille_id)
 );
+INSERT INTO utilisateurs (username, password, role) VALUES ('admin', '$2y$10$vkPVM4pRFfKPMofH5uZGPOu28YRONDEkMospqlyzZY8DnFhYqSOU6', 'admin');
