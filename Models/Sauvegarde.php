@@ -50,7 +50,19 @@ class Sauvegarde {
 
         return $result ? json_decode($result['etat_grille'], true) : null;
     }
-
+    public function getGridsByUserId($utilisateur_id) {
+        $sql = "SELECT grille_id  FROM sauvegardes WHERE utilisateur_id = :utilisateur_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':utilisateur_id' => $utilisateur_id]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function supprimerTousSauvegardeUtilisateur($utilisateur_id)
+    {
+        $sql = "DELETE FROM sauvegardes WHERE utilisateur_id = :utilisateur_id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([':utilisateur_id' => $utilisateur_id]);
+    }
     public function supprimerSauvegarde($utilisateur_id, $grille_id) {
         $sql = "DELETE FROM sauvegardes WHERE utilisateur_id = :utilisateur_id AND grille_id = :grille_id";
         $stmt = $this->db->prepare($sql);

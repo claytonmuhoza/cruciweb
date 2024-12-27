@@ -83,7 +83,6 @@ class GridController extends BaseController
             $gridData = [
                 'name' => htmlspecialchars($name),
                 'difficulty' => htmlspecialchars($difficulty),
-                'user_id' => $_SESSION['user']['id'], // Assurez-vous que l'utilisateur est connecté
             ];
 
             // Enregistrer la grille
@@ -221,8 +220,6 @@ class GridController extends BaseController
             $userId = $_SESSION['user']['id'];
             $gridId = $_POST['grid_id'] ?? null;
             $gridState = $_POST['grid_state'] ?? null;
-            echo $gridState;
-            return;
             if (!$gridId || !$gridState) {
                 http_response_code(400);
                 echo json_encode(['error' => 'Données invalides']);
@@ -239,11 +236,33 @@ class GridController extends BaseController
                 echo json_encode(['error' => 'Erreur lors de la sauvegarde']);
             }
         }
+        else
+        {
+            echo json_encode(['Erreur' => 'Erreur lors de la sauvegarde de la grille']);
+        }
     }
     public function showAllSavedGrid()
     {
+        if ($_SESSION['user']) {
+            $sauvegarde = new Sauvegarde();
+            $grid_ids = $sauvegarde->getGridsByUserId($_SESSION['user']['id']); // Liste des IDs
+            
+            $grids = [];
+            foreach ($grid_ids as $grid_id) {
+                $grid = Grid::getById($grid_id["grille_id"]);
+                if ($grid) {
+                    $grids[] = $grid;
+                }
+            }
+            
 
+            // Rendre la vue avec la liste complète des grilles
+            $this->render('grids/sauvegardes/liste', ['title' => 'Liste des grilles sauvegardées','grids' => $grids]);
+        } else {
+            $this->redirect('/');
+        }
     }
+
     // mise en place des api pour resoudre la grille
     public function getGridJson($gridId)
     {
@@ -271,22 +290,57 @@ class GridController extends BaseController
     }
     public function getCellsJson($gridId)
     {
+        // Récupérer les cellules de la grille
         $cells = Cell::getByGridId($gridId);
-
-        if (empty($cells)) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Aucune cellule trouvée pour cette grille']);
-            return;
-        }
-    
-        // Remplacer chaque lettre par 'x'
         foreach ($cells as &$cell) {
             if ($cell['value'] !== null) {
                 $cell['value'] = '#'; // Remplace la valeur par '#'
             }
+            
         }
+
+        if (isset($_SESSION['user'])) {
+        
+            $userId = $_SESSION['user']['id'];
+            $sauvegarde = new Sauvegarde();
+
+            // Charger la sauvegarde pour l'utilisateur et la grille
+            $etatGrille = $sauvegarde->chargerSauvegarde($userId, $gridId);
+
+            
+
+            if (empty($cells)) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Aucune cellule trouvée pour cette grille']);
+                return;
+            }
+
+            // Remplacement des # avec les valeurs de la sauvegarde
+            if (isset($etatGrille) && $etatGrille !== null) {
+                $etatGrille = json_decode($etatGrille);
+                
+                foreach ($cells as $index => &$cell) {
+                    if ($cell['value'] !== null) {
+                        $cell['value'] = '#'; // Remplace la valeur par '#'
+                    }
+                    // Vérifier que l'indice existe dans $etatGrille
+                    if (isset($etatGrille[$index])) {
+                        
+                        $etatCell = $etatGrille[$index];
+                    
+                        // Remplacer la valeur si elle n'est pas nulle
+                        if (isset($etatCell->value) && $etatCell->value !== null) {
+                            $cell['value'] = $etatCell->value;
+                        }
+                    }
+                }
+            
+            } 
+        }
+
         echo json_encode($cells);
     }
+
     public function getAllGridsJson()
     {
         $grids = Grid::getAll();
@@ -347,7 +401,7 @@ class GridController extends BaseController
                 $key = $jsonCell['ligne'] . ',' . $jsonCell['colonne'];
 
                 // Comparer la valeur de la cellule JSON à celle de la base de données
-                if (!isset($cellsMap[$key]) || $cellsMap[$key] !== $jsonCell['value']) {
+                if (!isset($cellsMap[$key]) || strtoupper($cellsMap[$key]) !== strtoupper($jsonCell['value'])) {
                     $is_resolved = "La grille n'est pas encore résolu";
                     break;
                 }

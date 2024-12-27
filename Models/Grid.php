@@ -10,19 +10,18 @@ class Grid
     /**
      * Crée une nouvelle grille et retourne son ID.
      *
-     * @param array $data Données de la grille (name, difficulty, user_id).
+     * @param array $data Données de la grille (name, difficulty).
      * @return int|null ID de la grille créée ou null en cas d'échec.
      */
     public static function save(array $data): ?int
     {
         try {
             $pdo = Database::getConnection();
-            $sql = "INSERT INTO grids (name, difficulty, user_id) VALUES (:name, :difficulty, :user_id)";
+            $sql = "INSERT INTO grids (name, difficulty) VALUES (:name, :difficulty)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ':name' => $data['name'],
                 ':difficulty' => $data['difficulty'],
-                ':user_id' => $data['user_id'],
             ]);
             return (int) $pdo->lastInsertId();
         } catch (PDOException $e) {

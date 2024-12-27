@@ -48,6 +48,7 @@ function renderGrid(grid, cells) {
                 input.disabled = !cellData.value;
                 input.dataset.row = i;
                 input.dataset.col = j;
+                (cellData.value && cellData.value!='#')? input.value = cellData.value : '' ; // Assigner la valeur de la cellule à l'input
                 cell.appendChild(input); // Ajouter l'input à la cellule
 
                 if (cellData.value) {
@@ -150,7 +151,7 @@ function sauvegarderEtatGrille()
     };
 
     // Envoi de la requête POST
-    fetch(`${apiUrl}/sauvegarde}`, {
+    fetch(`${apiUrl}/sauvegarder-grid`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded', // Type de contenu pour le POST
@@ -160,17 +161,25 @@ function sauvegarderEtatGrille()
         .then(response => response.json())
         .then(result => {
             // Affichage du résultat dans une boîte d'alerte
-            alert(`${JSON.stringify(result)}`);
+            console.log(result);
+            if(result?.success)
+            {
+                alert('L\'état de la grille a été sauvegardé avec succès.');
+            }
+            else
+            {
+                alert('Une erreur s\'est produite lors de la sauvegarde de l\'état de la grille.');
+            }
         })
         .catch(error => {
             // Gestion des erreurs
-            console.error('Erreur lors de la vérification des grilles :', error);
-            alert('Une erreur s\'est produite lors de la vérification.');
+            console.error('Erreur lors de la sauvegarge de la grille :', error);
+            alert('Une erreur s\'est produite du sauvegarde de l\'état de la grille.');
         });
 }
 // Ajouter un gestionnaire d'événements au bouton
 document.getElementById('verifierGrilles').addEventListener('click', verifierGrillesEtPoster);
-
+document.getElementById('sauvegarderGrilles')?.addEventListener('click', sauvegarderEtatGrille);
 
 // Charger la grille au démarrage
 loadGrid();

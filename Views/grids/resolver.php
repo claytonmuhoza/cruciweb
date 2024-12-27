@@ -5,7 +5,7 @@
     <div id="grid-container" class="grid-container container">
         <div>
             <?php if (isset($_SESSION['user'])): ?>
-                <button id="save-progress" class="btn">Sauvegarder la partie</button>
+                <button id="sauvegarderGrilles" class="btn">Sauvegarder la partie</button>
              <?php endif; ?>
              <button id="verifierGrilles">Verifier la reponse</button>
         </div>
