@@ -94,7 +94,30 @@ function handleCellFocus(event) {
     document.querySelector(`.row-definitions li[data-row="${row}"]`)?.classList.add('active');
     document.querySelector(`.column-definitions li[data-col="${col}"]`)?.classList.add('active');
 }
-function verifierGrillesEtPoster(gridData) {
+
+
+function verifierEtatGrilles() {
+    const gridData = [];
+
+    // Parcours des cellules de la grille pour récupérer les valeurs
+    const rows = document.querySelectorAll('tr');
+    rows.forEach((row, i) => {
+        const cols = row.querySelectorAll('td');
+        cols.forEach((col, j) => {
+            const input = col.querySelector('input');
+            gridData.push({
+                id: (i * 10 + j) + 1,  // Génération d'un ID unique pour chaque cellule
+                grid_id: gridId,
+                ligne: i + 1,  // L'index des lignes commence à 1
+                colonne: j + 1,  // L'index des colonnes commence à 1
+                value: input ? input.value || null : null // Si input existe, prendre sa valeur, sinon assigner null
+            });
+        });
+    });
+    return gridData; //on retourne les données actuel de la grille
+}
+function verifierGrillesEtPoster() {
+    const gridData = verifierEtatGrilles();
     const requestData = {
         cells: JSON.stringify(gridData), // Les données de la grille converties en JSON
     };
@@ -118,30 +141,35 @@ function verifierGrillesEtPoster(gridData) {
             alert('Une erreur s\'est produite lors de la vérification.');
         });
 }
+function sauvegarderEtatGrille()
+{
+    const gridData = verifierEtatGrilles();
+    const requestData = {
+        grid_state: JSON.stringify(gridData), // Les données de la grille converties en JSON
+        grid_id: gridId //l'id de la grille
+    };
 
-function verifierGrilles() {
-    const gridData = [];
-
-    // Parcours des cellules de la grille pour récupérer les valeurs
-    const rows = document.querySelectorAll('tr');
-    rows.forEach((row, i) => {
-        const cols = row.querySelectorAll('td');
-        cols.forEach((col, j) => {
-            const input = col.querySelector('input');
-            gridData.push({
-                id: (i * 10 + j) + 1,  // Génération d'un ID unique pour chaque cellule
-                grid_id: gridId,
-                ligne: i + 1,  // L'index des lignes commence à 1
-                colonne: j + 1,  // L'index des colonnes commence à 1
-                value: input ? input.value || null : null // Si input existe, prendre sa valeur, sinon assigner null
-            });
+    // Envoi de la requête POST
+    fetch(`${apiUrl}/sauvegarde}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded', // Type de contenu pour le POST
+        },
+        body: new URLSearchParams(requestData), // Encodage des données
+    })
+        .then(response => response.json())
+        .then(result => {
+            // Affichage du résultat dans une boîte d'alerte
+            alert(`${JSON.stringify(result)}`);
+        })
+        .catch(error => {
+            // Gestion des erreurs
+            console.error('Erreur lors de la vérification des grilles :', error);
+            alert('Une erreur s\'est produite lors de la vérification.');
         });
-    });
-    verifierGrillesEtPoster(gridData);
 }
-
 // Ajouter un gestionnaire d'événements au bouton
-document.getElementById('verifierGrilles').addEventListener('click', verifierGrilles);
+document.getElementById('verifierGrilles').addEventListener('click', verifierGrillesEtPoster);
 
 
 // Charger la grille au démarrage

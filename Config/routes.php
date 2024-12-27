@@ -31,6 +31,8 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
     (new GridController())->save(); // Sauvegarde la progression
 }elseif ($requestUri === '/api/grids' && $requestMethod === 'GET') {
     (new GridController())->getAllGridsJson();
+}elseif ($requestUri === '/api/sauvegarder-grid' && $requestMethod === 'POST') {
+    (new GridController())->save();
 } elseif (preg_match('#^/api/grids/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     $gridId = $matches[1];
     (new GridController())->getGridJson($gridId);

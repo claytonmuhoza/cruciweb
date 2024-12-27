@@ -221,7 +221,8 @@ class GridController extends BaseController
             $userId = $_SESSION['user']['id'];
             $gridId = $_POST['grid_id'] ?? null;
             $gridState = $_POST['grid_state'] ?? null;
-
+            echo $gridState;
+            return;
             if (!$gridId || !$gridState) {
                 http_response_code(400);
                 echo json_encode(['error' => 'Données invalides']);
@@ -239,7 +240,10 @@ class GridController extends BaseController
             }
         }
     }
+    public function showAllSavedGrid()
+    {
 
+    }
     // mise en place des api pour resoudre la grille
     public function getGridJson($gridId)
     {
