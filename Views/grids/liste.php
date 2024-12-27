@@ -12,10 +12,6 @@
                             <p class="difficulty">Niveau: <span class=<?=htmlspecialchars(generateClassByNiveau($grid["difficulty"]))?>> <?= htmlspecialchars(afficherNiveau($grid['difficulty'])) ?></span></p>
                         </div>
                         <div><?= htmlspecialchars($grid['num_rows'])?> lignes | <?= htmlspecialchars($grid['num_columns'])?> colonnes</div>
-                        <div class="card-body">
-                            <p>Par <?= htmlspecialchars($grid['user_id']) ?></p>
-                            
-                        </div>
                         <div class="card-footer">
                             <a class="btn-green" href="/grilles/resolve/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-view">Résoudre</a>
                             <!-- <a href="/grids/edit/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-edit">Modifier</a> -->

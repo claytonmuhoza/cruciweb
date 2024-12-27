@@ -41,9 +41,20 @@
       
     </div>
     
-
+    <button type="submit">Sauvegarder la grille</button>
     <div id="grid-editor" style="display: none; margin-top: 20px;">
         <h3>Complétez la grille</h3>
+        <div class="container">
+            Usage:
+            <ul>
+                <li>
+                    On rempli la grille avec des lettres un mots doit avoir au moins deux lettres et chaque mots doit être définit.
+                </li>
+                <li>
+                    Les définitions: Pour une ligne ou une colonne qui contient plusieur mots, les définitions seront séparer par un "-"
+                </li>
+            </ul> 
+        </div>
         <div class="grid-editor-container">
             <div id="grid-container" class="container"></div>
             <div>
@@ -59,7 +70,7 @@
         </div>
         
 
-        <button type="submit">Sauvegarder la grille</button>
+        
     </div>
 </form>
 
