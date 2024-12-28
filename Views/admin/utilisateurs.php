@@ -1,5 +1,5 @@
 <?php ob_start(); ?>
-<table>
+<table class="container">
     <thead>
         <tr>
             <th>Nom utilisateurs</th>

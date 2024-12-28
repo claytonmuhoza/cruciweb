@@ -26,6 +26,11 @@ class GridController extends BaseController
      */
     public function store()
     {
+        if($this->isAdmin())
+        {
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            return;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Récupérer les données du formulaire
             $name = $_POST['name'] ?? '';
@@ -230,7 +235,8 @@ class GridController extends BaseController
         }
         else
         {
-            echo json_encode(['Erreur' => 'Erreur lors de la sauvegarde de la grille']);
+            http_response_code(401);
+            echo json_encode(['error' => 'Utilisateur non connecté']);
         }
     }
     public function showAllSavedGrid()
@@ -347,58 +353,55 @@ class GridController extends BaseController
     }
     public function verificationCellsJSON($gridId)
     {
+        if($this->isAdmin())
+        {
+            echo json_encode(['Error' => 'Vous n\'avez pas les droits de verifier la grille']);
+            return;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') 
         {
             // Récupérer et décoder les données JSON envoyées
             $cellsJSON = json_decode($_POST['cells'], true);
-
             // Vérifier si les données sont au bon format
             if (!is_array($cellsJSON)) {
                 http_response_code(400); // Mauvaise requête
                 echo json_encode("Le format des données n'est pas valide");
                 return;
             }
-
             // Récupérer les cellules de la base de données
             $cells = Cell::getByGridId($gridId);
-
             // Vérifier si des cellules existent pour cette grille
             if (empty($cells)) {
-                http_response_code(404); 
-                echo json_encode("La grille n'est pas encore résolu"); 
+                http_response_code(404); // Grille non trouvée
+                echo json_encode(false); // `is_resolved` = false
                 return;
             }
-
             // Préparer les cellules de la base de données sous un format [ligne, colonne] => valeur
             $cellsMap = [];
             foreach ($cells as $cell) {
                 $key = $cell['ligne'] . ',' . $cell['colonne'];
                 $cellsMap[$key] = $cell['value'];
             }
-
             // Vérification des valeurs
             $is_resolved = "La grille est résolu";
             foreach ($cellsJSON as $jsonCell) {
                 if (
-                    !isset($jsonCell['ligne'], $jsonCell['colonne'], $jsonCell['value']) || // Vérifier la structure de chaque cellule
+                    !isset($jsonCell['ligne'], $jsonCell['colonne']) || // Vérifier la structure de chaque cellule
                     !is_int($jsonCell['ligne']) ||
                     !is_int($jsonCell['colonne'])
                 ) {
                     http_response_code(400); // Mauvaise requête
-                    echo json_encode("La grille n'est pas encore résolu");
+                    echo json_encode(isset($jsonCell['ligne']));
                     return;
                 }
-
                 // Générer la clé pour correspondre au format de `cellsMap`
                 $key = $jsonCell['ligne'] . ',' . $jsonCell['colonne'];
-
                 // Comparer la valeur de la cellule JSON à celle de la base de données
-                if (!isset($cellsMap[$key]) || strtoupper($cellsMap[$key]) !== strtoupper($jsonCell['value'])) {
+                if ($this->capitalize($cellsMap[$key]) !== $this->capitalize($jsonCell['value'])) {
                     $is_resolved = "La grille n'est pas encore résolu";
                     break;
                 }
             }
-
             // Retourner le résultat
             echo json_encode($is_resolved);
         } else {

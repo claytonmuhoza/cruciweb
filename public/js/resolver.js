@@ -15,7 +15,7 @@ async function loadGrid() {
     const grid = await gridResponse.json();
     const cells = await cellsResponse.json();
     const definitions = await definitionsResponse.json();
-    console.log(cells);
+    // console.log(cells);
     renderGrid(grid, cells);
     renderDefinitions(definitions);
 }
@@ -119,6 +119,7 @@ function verifierEtatGrilles() {
 }
 function verifierGrillesEtPoster() {
     const gridData = verifierEtatGrilles();
+    console.log(fell = gridData);
     const requestData = {
         cells: JSON.stringify(gridData), // Les données de la grille converties en JSON
     };

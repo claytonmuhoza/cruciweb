@@ -1,0 +1,12 @@
+# Activer le moteur de réécriture
+RewriteEngine On
+
+# Définir la base du répertoire (ajustez si nécessaire)
+RewriteBase /
+
+# Ignorer les fichiers et répertoires existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rediriger toutes les autres requêtes vers index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

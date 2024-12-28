@@ -57,6 +57,13 @@ class Sauvegarde {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    //une methode qui retourne vrai si la sauvegarde existe
+    public function sauvegardeExiste($utilisateur_id, $grille_id) {
+        $sql = "SELECT COUNT(*) FROM sauvegardes WHERE utilisateur_id = :utilisateur_id AND grille_id = :grille_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':utilisateur_id' => $utilisateur_id, ':grille_id' => $grille_id]);
+        return $stmt->fetchColumn() > 0;
+    }
     public function deleteByUser($utilisateur_id)
     {
         $sql = "DELETE FROM sauvegardes WHERE utilisateur_id = :utilisateur_id";
