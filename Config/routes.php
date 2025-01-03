@@ -16,7 +16,7 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
     (new UtilisateurController())->connexion();
 } elseif ($requestUri === '/inscription') {
     (new UtilisateurController())->inscription();
-} elseif ($requestUri === '/grilles/create' && $requestMethod === 'GET') {
+} elseif ($requestUri === '/grilles/creation' && $requestMethod === 'GET') {
     (new GridController())->create();
 } elseif ($requestUri === '/grilles/store' && $requestMethod === 'POST') {
     (new GridController())->store();
