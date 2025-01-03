@@ -1,3 +1,39 @@
+/* Media query pour les ecrans de petite taille */
+@media (max-width: 45rem) {
+    header.top-menu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header.top-menu nav {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    header.top-menu nav a {
+        margin-right: 0;
+        margin-bottom: 0.625rem;
+    }
+
+    .container {
+        padding: 0.625rem;
+    }
+
+    .cards-container-grid {
+        grid-template-columns: repeat(auto-fill, 1fr);
+    }
+    .grid-editor-container
+    {
+        display: flex;
+        flex-direction: column;
+    }
+    .page-resolver-container .resolver-page
+    {
+        display: flex;
+        flex-direction: column;
+    }
+    
+}
 /* Global reset */
 * {
     margin: 0;
@@ -217,12 +253,18 @@ table tr:nth-child(even) {
     color: #155724;
     border: 1px solid #c3e6cb;
 }
-
+.erreur
+{
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
 .message.error {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
+
 .flex-center
 {
     display: flex;

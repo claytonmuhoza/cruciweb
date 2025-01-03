@@ -13,7 +13,7 @@ class GridController extends BaseController
      */
     public function create()
     {
-        if($this->isAdmin())
+        if($this->isAdmin() || !isset($_SESSION['user']))
         {
             $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
             return;
@@ -101,7 +101,7 @@ class GridController extends BaseController
             if ($gridId === null) {
                 $this->render('grids/create', [
                     'title' => 'Créer une Grille',
-                    'error' => 'Erreur lors de l\'enregistrement de la grille.',
+                    'error' => 'Erreur lors de l\'enregistrement de la grille. Une grille portant le même nom existe déjà',
                 ]);
                 return;
             }
@@ -208,7 +208,7 @@ class GridController extends BaseController
      */
     public function save()
     {
-        if($this->isAdmin())
+        if($this->isAdmin() || !isset($_SESSION['user']))
         {
             echo json_encode(['Error' => 'Vous n\'avez pas les droits de sauvegarder la grille']);
             return;
@@ -241,6 +241,11 @@ class GridController extends BaseController
     }
     public function showAllSavedGrid()
     {
+        if($this->isAdmin() || !isset($_SESSION['user']))
+        {
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            return;
+        }
         if ($_SESSION['user']) {
             $sauvegarde = new Sauvegarde();
             $grid_ids = $sauvegarde->getGridsByUserId($_SESSION['user']['id']); // Liste des IDs

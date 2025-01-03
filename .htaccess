@@ -1,7 +1,5 @@
-# Activer le moteur de réécriture
 RewriteEngine On
 
-# Définir la base du répertoire (ajustez si nécessaire)
 RewriteBase /
 
 # Ignorer les fichiers et répertoires existants

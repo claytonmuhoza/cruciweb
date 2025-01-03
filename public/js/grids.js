@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridEditor = document.getElementById('grid-editor');
     const rowDefinitions = document.getElementById('row-definitions');
     const columnDefinitions = document.getElementById('column-definitions');
+    const form = document.getElementById('grid-form');
 
     generateButton.addEventListener('click', () => {
         const rows = parseInt(document.getElementById('rows').value, 10);
@@ -68,4 +69,85 @@ document.addEventListener('DOMContentLoaded', () => {
         // Afficher l'éditeur de grille et les définitions
         gridEditor.style.display = 'block';
     });
+
+    form.addEventListener('submit', (e) => {
+        const rows = parseInt(document.getElementById('rows').value, 10);
+        const columns = parseInt(document.getElementById('columns').value, 10);
+
+        if (!gridEditor.style.display || gridEditor.style.display === 'none') {
+            alert('Veuillez générer la grille avant de soumettre.');
+            e.preventDefault();
+            return;
+        }
+
+        const cells = Array.from(document.querySelectorAll('.grid-cell'));
+        const grid = [];
+
+        for (let r = 0; r < rows; r++) {
+            const row = cells.slice(r * columns, (r + 1) * columns).map(cell => cell.value.trim());
+            grid.push(row);
+        }
+
+        // Validation des lignes
+        for (let r = 0; r < rows; r++) {
+            const row = grid[r];
+            let words = [];
+            let word = '';
+
+            // Parcourir chaque élément du tableau
+            for (let char of row) {
+                if (char === '') {
+                    if (word.length >= 2) {
+                        words.push(word); // Ajouter le mot accumulé si sa taille >= 2
+                    }
+                    word = ''; // Réinitialiser pour le prochain mot
+                } else {
+                    word += char; // Construire le mot
+                }
+            }
+
+            // Ajouter le dernier mot s'il existe et si sa taille >= 2
+            if (word.length >= 2) {
+                words.push(word);
+            }
+            const definitions = document.getElementById(`definition_row_${r}`).value.split('-');
+
+            if (words.length < 1 || words.length !== definitions.length) {
+                alert(`La ligne ${r + 1} doit contenir autant de mots valide que de définitions. Mots valides: ${words.length}, Définitions: ${definitions.length} (les définitions doivent être séparées par un tiret '-')`);
+                e.preventDefault();
+                return;
+            }
+        }
+
+        // Validation des colonnes
+        for (let c = 0; c < columns; c++) {
+            const column = grid.map(row => row[c]);
+            let words = [];
+            let word = '';
+
+            // Parcourir chaque élément du tableau
+            for (let char of column) {
+                if (char === '') {
+                    if (word.length >= 2) {
+                        words.push(word); // Ajouter le mot accumulé si sa taille >= 2
+                    }
+                    word = ''; // Réinitialiser pour le prochain mot
+                } else {
+                    word += char; // Construire le mot
+                }
+            }
+
+            // Ajouter le dernier mot s'il existe et si sa taille >= 2
+            if (word.length >= 2) {
+                words.push(word);
+            }
+            const definitions = document.getElementById(`definition_column_${c}`).value.split('-');
+            if (words.length < 1 || words.length !== definitions.length) {
+                alert(`La colonne ${c + 1} doit contenir autant de mots valide que de définitions. Mots valides: ${words.length}, Définitions: ${definitions.length} (les définitions doivent être séparées par un tiret '-')`);
+                e.preventDefault();
+                return;
+            }
+        }
+    });
 });
+

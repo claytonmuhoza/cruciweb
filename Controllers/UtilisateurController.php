@@ -15,6 +15,12 @@ class UtilisateurController extends BaseController {
             $username = $_POST['username'];
             $password = $_POST['password'];
 
+            $errors = $this->validateInscriptionInput($username, $password);
+            if (!empty($errors)) {
+                $this->render('auth/inscription', ['errors' => $errors]);
+                return;
+            }
+
             if ($this->utilisateurModel->existe($username)) {
                 $this->render('auth/inscription', ['error' => "Le nom d'utilisateur existe déjà."]);
             } else if ($this->utilisateurModel->inscrire($username, $password)) {
@@ -31,6 +37,12 @@ class UtilisateurController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password'];
+
+            $errors = $this->validateConnexionInput($username, $password);
+            if (!empty($errors)) {
+                $this->render('auth/connexion', ['errors' => $errors]);
+                return;
+            }
 
             $utilisateur = $this->utilisateurModel->connecter($username, $password);
             if ($utilisateur) {
@@ -72,7 +84,46 @@ class UtilisateurController extends BaseController {
             return;
         }
     }
-   
+    //fonction de validation des données d'inscription
+    public function validateInscriptionInput($username, $password)
+    {
+        $errors = [];
+
+        // Validation du nom d'utilisateur
+        if (empty(trim($username))) {
+            $errors['username'] = "Le nom d'utilisateur ne doit pas être vide ou contenir uniquement des espaces.";
+        } elseif (preg_match('/\s/', $username)) {
+            $errors['username'] = "Le nom d'utilisateur ne doit pas contenir d'espace.";
+        }
+
+        // Validation du mot de passe
+        if (empty(trim($password))) {
+            $errors['password'] = "Le mot de passe ne doit pas être vide ou contenir uniquement des espaces.";
+        } elseif (strlen($password) < 5) {
+            $errors['password'] = "Le mot de passe doit contenir au moins 5 caractères.";
+        }
+
+        return $errors;
+    }
+    //fonction de validation des données de connexion
+    public function validateConnexionInput($username, $password)
+    {
+        $errors = [];
+
+        // Validation du nom d'utilisateur
+        if (empty(trim($username))) {
+            $errors['username'] = "Le nom d'utilisateur ne doit pas être vide ou contenir uniquement des espaces.";
+        } elseif (preg_match('/\s/', $username)) {
+            $errors['username'] = "Le nom d'utilisateur ne doit pas contenir d'espace.";
+        }
+
+        // Validation du mot de passe
+        if (empty(trim($password))) {
+            $errors['password'] = "Le mot de passe ne doit pas être vide ou contenir uniquement des espaces.";
+        }
+
+        return $errors;
+    }
 
     
 }

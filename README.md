@@ -1,10 +1,21 @@
 # Cruciweb
+## Configuration automatique à l'aide d'un script
+On copier tous les fichiers dans le dossier `/var/www/html`
+La configuration de la vm se fait automatiquement en executant en tant que root le script bash
+se trouvant dans le fichier `/var/www/html/autoconfig_vm.bash`
 
-pour lancer l'application il faut avoir installer PHP localement sur la machine
-puis dans l'invite de commande tu execute la commande suivante:
 ```
-php -S localhost:8000
+bash /var/www/html/autoconfig_vm.bash
 ```
-on utilisera une base de donnée mysql, la structure des tables est contenu dans le fichier db.sql et la configuration de la base
-de donnée se fait dans le fichier `Config/Database.php`
-Le serveur va démarrer sur le port 8000. Vous pouvez y acceder en tapant `http://localhost:8000` dans le navigateur
+
+## configuration de la base de donnée
+La configuration des informations de la base de donnée sont dans le fichier `var/www/html/Config/Database.php`. Si le nom d'utilisateur, le serveur et le nom
+de la base de donnée sont bien configurer les tables seront créés automatique et l'utilisateur `admin` sera c
+## identifiant par défault de l'utilisateur admin
+Les identifiants de connexion pour l'utilisateur `admin` sont:
+
+`username:` admin
+
+`password:` madrillet 
+
+L'application est pret à être utiliser.
