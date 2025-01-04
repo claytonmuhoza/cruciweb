@@ -33,6 +33,9 @@ if ($requestUri === '/' && $requestMethod === 'GET') {
 } elseif (preg_match('#^/grilles/delete/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
     $gridId = $matches[1];
     (new GridController())->deleteGrid($gridId); // Appelle la méthode delete avec l'ID de la grille
+} elseif (preg_match('#^/grilles/sauvegarde/delete/(\d+)$#', $requestUri, $matches) && $requestMethod === 'GET') {
+    $gridId = $matches[1];
+    (new GridController())->deleteGridByUser($gridId); // Appelle la méthode delete avec l'ID de la grille
 }elseif ($requestUri === '/grilles/save-progress' && $requestMethod === 'POST') {
     (new GridController())->save(); // Sauvegarde la progression
 }elseif ($requestUri === '/api/grids' && $requestMethod === 'GET') {

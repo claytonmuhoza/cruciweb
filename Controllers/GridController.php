@@ -26,7 +26,7 @@ class GridController extends BaseController
      */
     public function store()
     {
-        if($this->isAdmin())
+        if($this->isAdmin() || !isset($_SESSION['user']))
         {
             $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
             return;
@@ -179,13 +179,31 @@ class GridController extends BaseController
             return;
         }
     }
-    public function resolveGrid($gridId)
+    public function deleteGridByUser($id)
     {
-        if($this->isAdmin())
+        if($this->isAuthenticated())
         {
-            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous n\'avez pas les droits pour accéder à cette page']);
+            $sauvegarde = new Sauvegarde();
+            if($sauvegarde->sauvegardeExiste($_SESSION['user']['id'], $id))
+            {
+                $sauvegarde->deleteByGridAndUser($id, $_SESSION['user']['id']);
+                $this->redirect('/grilles/sauvegarde');
+            }
+            else
+            {
+                echo json_encode(['success' => false]);
+                return;
+            }
+        }
+        else
+        {
+            echo json_encode(['success' => false]);
             return;
         }
+    }
+    public function resolveGrid($gridId)
+    {
+        
         $grid = Grid::getById($gridId);
         $definitions = Definition::getByGridId($gridId);
         $cells = Cell::getByGridId($gridId);
@@ -358,11 +376,7 @@ class GridController extends BaseController
     }
     public function verificationCellsJSON($gridId)
     {
-        if($this->isAdmin())
-        {
-            echo json_encode(['Error' => 'Vous n\'avez pas les droits de verifier la grille']);
-            return;
-        }
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') 
         {
             // Récupérer et décoder les données JSON envoyées

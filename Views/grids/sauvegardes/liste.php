@@ -14,8 +14,7 @@
                         <div><?= htmlspecialchars($grid['num_rows'])?> lignes | <?= htmlspecialchars($grid['num_columns'])?> colonnes</div>
                         <div class="card-footer">
                             <a class="btn-green" href="/grilles/resolve/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-view">Continue</a>
-                            <!-- <a href="/grids/edit/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-edit">Modifier</a> -->
-                            <!-- <a href="/grids/delete/<?= htmlspecialchars($grid['id']) ?>" class="btn btn-delete" onclick="return confirm('Voulez-vous vraiment supprimer cette grille ?')">Supprimer</a> -->
+                            <a href="/grilles/sauvegarde/delete/<?= htmlspecialchars($grid['id']) ?>" class="btn-red" onclick="return confirm('Voulez-vous vraiment supprimer cette grille ?')">Supprimer</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

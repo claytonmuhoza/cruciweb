@@ -45,8 +45,9 @@
     <div id="grid-editor" style="display: none; margin-top: 20px;">
         <h3>Complétez la grille</h3>
         <div class="container">
-            Usage:
+            Notice d'utilisation:
             <ul>
+                <li>Les cases noires sont déduits des cases vide donc chaque vide (non remplie) est une case noire</li>
                 <li>
                     On rempli la grille avec des lettres un mots doit avoir au moins deux lettres et chaque mots doit être définit.
                 </li>

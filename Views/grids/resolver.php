@@ -4,7 +4,7 @@
     
     <div id="grid-container" class="grid-container container">
         <div>
-            <?php if (isset($_SESSION['user'])): ?>
+            <?php if (isset($_SESSION['user']) && !$this->isAdmin()): ?>
                 <button id="sauvegarderGrilles" class="btn">Sauvegarder la partie</button>
              <?php endif; ?>
              <button id="verifierGrilles">Verifier la reponse</button>

@@ -76,4 +76,10 @@ class Sauvegarde {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':grille_id' => $grille_id]);
     }
+    public function deleteByGridAndUser($grille_id, $utilisateur_id)
+    {
+        $sql = "DELETE FROM sauvegardes WHERE grille_id = :grille_id AND utilisateur_id = :utilisateur_id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([':grille_id' => $grille_id, ':utilisateur_id' => $utilisateur_id]);
+    }
 }

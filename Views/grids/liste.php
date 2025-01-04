@@ -20,10 +20,8 @@
                         <div class="card-footer">
                             <?php if ($this->isAdmin()) : ?>
                                 <a href="/grilles/delete/<?= htmlspecialchars($grid['id']) ?>" class="btn-red" onclick="return confirm('Voulez-vous vraiment supprimer cette grille ?')">Supprimer</a>
-                            <?php else : ?>
-                                <a class="btn-green" href="/grilles/resolve/<?= htmlspecialchars($grid['id']) ?>" >Résoudre</a>
                             <?php endif; ?>
-                            
+                            <a class="btn-green" href="/grilles/resolve/<?= htmlspecialchars($grid['id']) ?>" >Résoudre</a>    
                         </div>
                     </div>
                 <?php endforeach; ?>

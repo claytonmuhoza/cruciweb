@@ -1,19 +1,21 @@
 #!/bin/bash
 
+#lien de deploiement
+LIEN_DEPLOIEMENT="/var/www/html"
 # Chemin du fichier de configuration Apache
 APACHE_CONF="/etc/apache2/apache2.conf"
 
 # Texte à ajouter à la fin du fichier de configuration
-APACHE_CONFIG_BLOCK="<Directory /var/www/html>
+APACHE_CONFIG_BLOCK="<Directory $LIEN_DEPLOIEMENT>
     AllowOverride All
     Require all granted
 </Directory>"
 
 # Chemin du fichier .htaccess
-HTACCESS_FILE="/var/www/html/.htaccess"
+HTACCESS_FILE="$LIEN_DEPLOIEMENT/.htaccess"
 
 # Chemin du fichier index.html
-INDEX_FILE="/var/www/html/index.html"
+INDEX_FILE="$LIEN_DEPLOIEMENT/index.html"
 
 # Contenu du fichier .htaccess
 HTACCESS_CONTENT="RewriteEngine On
@@ -34,7 +36,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]"
 
 # Ajouter le texte au fichier de configuration Apache
-if ! grep -q "<Directory /var/www/html>" "$APACHE_CONF"; then
+if ! grep -q "<Directory $LIEN_DEPLOIEMENT>" "$APACHE_CONF"; then
     echo -e "\n$APACHE_CONFIG_BLOCK" >> "$APACHE_CONF"
     echo "Configuration Apache mise à jour."
 else

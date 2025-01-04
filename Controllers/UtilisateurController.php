@@ -11,6 +11,10 @@ class UtilisateurController extends BaseController {
     }
 
     public function inscription() {
+        if(isset($_SESSION['user'])){
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous êtes déjà connecté']);
+            return;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password'];
@@ -34,6 +38,10 @@ class UtilisateurController extends BaseController {
     }
     
     public function connexion() {
+        if(isset($_SESSION['user'])){
+            $this->render('error/errorpage', ['codeErreur' => 403, 'messageErreur' => 'Vous êtes déjà connecté']);
+            return;
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password'];
